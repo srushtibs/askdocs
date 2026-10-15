@@ -11,3 +11,4 @@ python-multipart
 celery
 redis
 pytest
+bcrypt<4.1
