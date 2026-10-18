@@ -17,8 +17,16 @@ services:
     env_file: .env
     ports: ["8000:8000"]
     depends_on: [db, redis]
-    volumes: ["./backend:/code"]
+    volumes: ["./backend:/code", "uploads:/uploads"]
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  worker:
+    build: ./backend
+    env_file: .env
+    depends_on: [db, redis]
+    volumes: ["./backend:/code", "uploads:/uploads"]
+    command: celery -A app.worker.celery_app worker --loglevel=info
 
 volumes:
   pgdata:
+  uploads:
